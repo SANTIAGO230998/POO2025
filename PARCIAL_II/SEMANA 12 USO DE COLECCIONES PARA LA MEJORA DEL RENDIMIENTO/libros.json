@@ -1,0 +1,32 @@
+{
+    "1001": {
+        "titulo": "Cien A\u00f1os de Soledad",
+        "autor": "Gabriel Garc\u00eda M\u00e1rquez",
+        "categoria": "Novela",
+        "isbn": "1001"
+    },
+    "1002": {
+        "titulo": "El Principito",
+        "autor": "Antoine de Saint-Exup\u00e9ry",
+        "categoria": "Infantil",
+        "isbn": "1002"
+    },
+    "1003": {
+        "titulo": "Don Quijote de la Mancha",
+        "autor": "Miguel de Cervantes",
+        "categoria": "Novela",
+        "isbn": "1003"
+    },
+    "1004": {
+        "titulo": "La Odisea",
+        "autor": "Homero",
+        "categoria": "\u00c9pica",
+        "isbn": "1004"
+    },
+    "1005": {
+        "titulo": "1984",
+        "autor": "George Orwell",
+        "categoria": "Ciencia Ficci\u00f3n",
+        "isbn": "1005"
+    }
+}

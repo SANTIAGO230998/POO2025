@@ -1,0 +1,22 @@
+{
+    "U001": {
+        "nombre": "Juan P\u00e9rez",
+        "id_usuario": "U001"
+    },
+    "U002": {
+        "nombre": "Mar\u00eda L\u00f3pez",
+        "id_usuario": "U002"
+    },
+    "U003": {
+        "nombre": "Carlos S\u00e1nchez",
+        "id_usuario": "U003"
+    },
+    "U004": {
+        "nombre": "Ana G\u00f3mez",
+        "id_usuario": "U004"
+    },
+    "U005": {
+        "nombre": "Luis Torres",
+        "id_usuario": "U005"
+    }
+}
