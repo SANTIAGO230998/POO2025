@@ -1,4 +1,4 @@
-# archivo.py
+# gestor_archivo.py
 import os  # Para verificar si el archivo existe y manejar rutas de archivos
 from producto import Producto  # Importamos la clase Producto para crear objetos
 
