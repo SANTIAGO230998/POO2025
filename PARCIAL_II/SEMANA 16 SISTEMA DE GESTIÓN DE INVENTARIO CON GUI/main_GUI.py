@@ -111,58 +111,51 @@ class SistemaInventario:
         self.var_cantidad = tk.StringVar()
         self.var_precio = tk.StringVar()
         self.var_buscar = tk.StringVar()
-        self.selected_id = None  # ID seleccionado para eliminar
+        self.selected_id = None
 
-        # Frame superior con entradas
+        # Frame superior
         frame_top = tk.Frame(self.ventana_productos)
         frame_top.pack(fill="x", padx=10, pady=10)
 
-        # Entradas verticales uniformes con padding
-        padx_entry = 5
-        pady_entry = 5
-        entry_width = 25
-        # ID
-        tk.Label(frame_top, text="ID:").grid(row=0, column=0, sticky="w", padx=padx_entry, pady=pady_entry)
-        self.entry_id = tk.Entry(frame_top, textvariable=self.var_id, width=entry_width)
-        self.entry_id.grid(row=0, column=1, padx=padx_entry, pady=pady_entry)
-        # Nombre
-        tk.Label(frame_top, text="Nombre:").grid(row=1, column=0, sticky="w", padx=padx_entry, pady=pady_entry)
-        self.entry_nombre = tk.Entry(frame_top, textvariable=self.var_nombre, width=entry_width)
-        self.entry_nombre.grid(row=1, column=1, padx=padx_entry, pady=pady_entry)
-        # Cantidad
-        tk.Label(frame_top, text="Cantidad:").grid(row=2, column=0, sticky="w", padx=padx_entry, pady=pady_entry)
-        self.entry_cantidad = tk.Entry(frame_top, textvariable=self.var_cantidad, width=entry_width)
-        self.entry_cantidad.grid(row=2, column=1, padx=padx_entry, pady=pady_entry)
-        # Precio
-        tk.Label(frame_top, text="Precio:").grid(row=3, column=0, sticky="w", padx=padx_entry, pady=pady_entry)
-        self.entry_precio = tk.Entry(frame_top, textvariable=self.var_precio, width=entry_width)
-        self.entry_precio.grid(row=3, column=1, padx=padx_entry, pady=pady_entry)
+        # Entradas
+        tk.Label(frame_top, text="ID:").grid(row=0, column=0, sticky="w")
+        self.entry_id = tk.Entry(frame_top, textvariable=self.var_id, width=25)
+        self.entry_id.grid(row=0, column=1)
+        tk.Label(frame_top, text="Nombre:").grid(row=1, column=0, sticky="w")
+        self.entry_nombre = tk.Entry(frame_top, textvariable=self.var_nombre, width=25)
+        self.entry_nombre.grid(row=1, column=1)
+        tk.Label(frame_top, text="Cantidad:").grid(row=2, column=0, sticky="w")
+        self.entry_cantidad = tk.Entry(frame_top, textvariable=self.var_cantidad, width=25)
+        self.entry_cantidad.grid(row=2, column=1)
+        tk.Label(frame_top, text="Precio:").grid(row=3, column=0, sticky="w")
+        self.entry_precio = tk.Entry(frame_top, textvariable=self.var_precio, width=25)
+        self.entry_precio.grid(row=3, column=1)
 
-        # Botones columna separada
-        button_padx = 20
+        # Botones
         tk.Button(frame_top, text="Agregar", bg="#4CAF50", fg="white", width=12,
-                  command=self.agregar_producto).grid(row=0, column=2, padx=button_padx, pady=5)
+                  command=self.agregar_producto).grid(row=0, column=2, padx=20)
         tk.Button(frame_top, text="Modificar", bg="#2196F3", fg="white", width=12,
-                  command=self.modificar_producto).grid(row=1, column=2, padx=button_padx, pady=5)
+                  command=self.modificar_producto).grid(row=1, column=2, padx=20)
         tk.Button(frame_top, text="Eliminar", bg="#f44336", fg="white", width=12,
-                  command=self.eliminar_producto).grid(row=2, column=2, padx=button_padx, pady=5)
+                  command=self.eliminar_producto).grid(row=2, column=2, padx=20)
         tk.Button(frame_top, text="Cerrar", bg="#9E9E9E", fg="white", width=12,
-                  command=self.cerrar_ventana_productos).grid(row=3, column=2, padx=button_padx, pady=5)
+                  command=self.cerrar_ventana_productos).grid(row=3, column=2, padx=20)
 
-        # Buscar igual que antes, columna derecha
-        tk.Label(frame_top, text="Buscar:").grid(row=0, column=3, sticky="w", padx=padx_entry, pady=pady_entry)
+        # Buscar
+        tk.Label(frame_top, text="Buscar:").grid(row=0, column=3, sticky="w")
         self.entry_buscar = tk.Entry(frame_top, textvariable=self.var_buscar, width=20)
-        self.entry_buscar.grid(row=0, column=4, padx=padx_entry, pady=pady_entry)
+        self.entry_buscar.grid(row=0, column=4)
         tk.Button(frame_top, text="Buscar", bg="#FF9800", fg="white", width=12,
-                  command=self.buscar_producto).grid(row=1, column=4, padx=padx_entry, pady=pady_entry)
+                  command=self.buscar_producto).grid(row=1, column=4)
 
-        # Treeview con scrollbar
+        # Treeview
         self.tree_frame = tk.Frame(self.ventana_productos)
         self.tree_frame.pack(fill="both", expand=True, padx=10, pady=10)
         self.tree_scroll = tk.Scrollbar(self.tree_frame)
         self.tree_scroll.pack(side="right", fill="y")
 
-        self.tree = ttk.Treeview(self.tree_frame, columns=("ID","Nombre","Cantidad","Precio"), show="headings", yscrollcommand=self.tree_scroll.set)
+        self.tree = ttk.Treeview(self.tree_frame, columns=("ID", "Nombre", "Cantidad", "Precio"), show="headings",
+                                 yscrollcommand=self.tree_scroll.set)
         self.tree_scroll.config(command=self.tree.yview)
         for col in self.tree["columns"]:
             self.tree.heading(col, text=col)
@@ -171,37 +164,40 @@ class SistemaInventario:
 
         # Doble clic para cargar
         self.tree.bind("<Double-1>", self.cargar_producto_seleccionado)
-
-        # Selección simple para eliminar
         self.tree.bind("<<TreeviewSelect>>", self.seleccionar_para_eliminar)
 
         self.cargar_tabla()
 
+    # ---------- Seleccionar ----------
     def seleccionar_para_eliminar(self, event):
         selected = self.tree.selection()
         if selected:
-            self.selected_id = self.tree.item(selected[0])["values"][0]
+            self.selected_id = str(self.tree.item(selected[0])["values"][0])
         else:
             self.selected_id = None
 
-    def cerrar_ventana_productos(self):
-        self.ventana_productos_abierta = False
-        self.ventana_productos.destroy()
+    # ---------- Eliminar ----------
+    def eliminar_producto(self):
+        pid = self.selected_id
+        if not pid:
+            messagebox.showerror("Error", "Seleccione un producto para eliminar", parent=self.ventana_productos)
+            return
+        if messagebox.askyesno("Confirmar", f"¿Eliminar producto {pid}?", parent=self.ventana_productos):
+            if self.inventario.eliminar_producto(pid):
+                messagebox.showinfo("✅", "Producto eliminado", parent=self.ventana_productos)
+                self.selected_id = None
+                self.cargar_tabla()
+            else:
+                messagebox.showerror("❌", "No se pudo eliminar el producto", parent=self.ventana_productos)
 
-    def cargar_tabla(self, productos=None):
-        for i in self.tree.get_children():
-            self.tree.delete(i)
-        if productos is None:
-            productos = self.inventario.listar_productos()
-        for p in productos:
-            self.tree.insert("", "end", values=(p.get_id(), p.get_nombre(), p.get_cantidad(), f"${p.get_precio():.2f}"))
-
+    # ---------- Cargar producto seleccionado ----------
     def cargar_producto_seleccionado(self, event):
         item = self.tree.selection()
         if not item:
             return
         pid, nombre, cantidad, precio = self.tree.item(item)["values"]
-        self.var_id.set(pid)
+        self.selected_id = str(pid)
+        self.var_id.set(str(pid))
         self.entry_id.config(state="disabled")
         self.var_nombre.set(nombre)
         self.var_cantidad.set(cantidad)
@@ -209,6 +205,21 @@ class SistemaInventario:
             precio = precio.replace("$","")
         self.var_precio.set(precio)
 
+    # ---------- Cerrar ventana ----------
+    def cerrar_ventana_productos(self):
+        self.ventana_productos_abierta = False
+        self.ventana_productos.destroy()
+
+    # ---------- Cargar tabla ----------
+    def cargar_tabla(self, productos=None):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+        if productos is None:
+            productos = self.inventario.listar_productos()
+        for p in productos:
+            self.tree.insert("", "end", values=(str(p.get_id()), p.get_nombre(), p.get_cantidad(), f"${p.get_precio():.2f}"))
+
+    # ---------- Agregar ----------
     def agregar_producto(self):
         pid = self.var_id.get().strip()
         nombre = self.var_nombre.get().strip()
@@ -231,6 +242,7 @@ class SistemaInventario:
         else:
             messagebox.showerror("❌", "ID ya existe", parent=self.ventana_productos)
 
+    # ---------- Modificar ----------
     def modificar_producto(self):
         pid = self.var_id.get().strip()
         nombre = self.var_nombre.get().strip()
@@ -251,20 +263,7 @@ class SistemaInventario:
         self.entry_id.config(state="normal")
         self.cargar_tabla()
 
-    def eliminar_producto(self):
-        pid = self.selected_id
-        if not pid:
-            messagebox.showerror("Error", "Seleccione un producto para eliminar", parent=self.ventana_productos)
-            return
-        if messagebox.askyesno("Confirmar", f"¿Eliminar producto {pid}?", parent=self.ventana_productos):
-            eliminado = self.inventario.eliminar_producto(pid)
-            if eliminado:
-                messagebox.showinfo("✅", "Producto eliminado", parent=self.ventana_productos)
-                self.selected_id = None
-                self.cargar_tabla()
-            else:
-                messagebox.showerror("❌", "No se pudo eliminar el producto", parent=self.ventana_productos)
-
+    # ---------- Buscar ----------
     def buscar_producto(self):
         nombre = self.var_buscar.get().strip().lower()
         if not nombre:
@@ -273,6 +272,7 @@ class SistemaInventario:
         resultados = [p for p in self.inventario.listar_productos() if nombre in p.get_nombre().lower()]
         self.cargar_tabla(resultados)
 
+    # ---------- Limpiar campos ----------
     def limpiar_campos(self):
         self.var_id.set("")
         self.var_nombre.set("")
@@ -280,7 +280,7 @@ class SistemaInventario:
         self.var_precio.set("")
         self.entry_id.config(state="normal")
 
-# Ejecutar aplicación
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = SistemaInventario(root)

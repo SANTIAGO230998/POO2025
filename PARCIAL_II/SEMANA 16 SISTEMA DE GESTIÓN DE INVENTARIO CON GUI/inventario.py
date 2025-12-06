@@ -1,43 +1,61 @@
+import json
 from producto import Producto
-from gestor_archivo import GestionInventario
+import os
 
 class Inventario:
-    """
-    Clase que maneja la lógica de inventario usando un diccionario.
-    Clave: ID del producto, Valor: objeto Producto.
-    """
+    def __init__(self, archivo="productos.json"):
+        self.archivo = archivo
+        self.productos = {}  # ID como string -> Producto
+        self.cargar_productos()
 
-    def __init__(self):
-        self.gestor = GestionInventario()
-        self.productos = self.gestor.cargar_productos(Producto)
+    # ---------- Cargar desde JSON ----------
+    def cargar_productos(self):
+        if not os.path.exists(self.archivo):
+            self.productos = {}
+            return
+        try:
+            with open(self.archivo, "r", encoding="utf-8") as f:
+                datos = json.load(f)
+                self.productos = {str(d["id"]): Producto(str(d["id"]), d["nombre"], d["cantidad"], d["precio"]) for d in datos}
+        except (json.JSONDecodeError, KeyError):
+            self.productos = {}
 
-    # ------ Agregar producto ------
-    def agregar_producto(self, producto):
-        if producto.get_id() in self.productos:
-            return False  # No se puede agregar ID repetido
-        self.productos[producto.get_id()] = producto
-        self.gestor.guardar_productos(self.productos)
+    # ---------- Guardar en JSON ----------
+    def guardar_productos(self):
+        datos = [p.to_dict() for p in self.productos.values()]
+        with open(self.archivo, "w", encoding="utf-8") as f:
+            json.dump(datos, f, indent=4, ensure_ascii=False)
+
+    # ---------- Listar productos ----------
+    def listar_productos(self):
+        return list(self.productos.values())
+
+    # ---------- Agregar producto ----------
+    def agregar_producto(self, producto: Producto):
+        pid = str(producto.get_id())
+        if pid in self.productos:
+            return False
+        self.productos[pid] = producto
+        self.guardar_productos()
         return True
 
-    # ------ Eliminar producto ------
-    def eliminar_producto(self, id_producto):
-        if id_producto in self.productos:
-            del self.productos[id_producto]
-            self.gestor.guardar_productos(self.productos)
+    # ---------- Actualizar producto ----------
+    def actualizar_producto(self, pid, nombre, cantidad, precio):
+        pid = str(pid)
+        if pid in self.productos:
+            p = self.productos[pid]
+            p.set_nombre(nombre)
+            p.set_cantidad(cantidad)
+            p.set_precio(precio)
+            self.guardar_productos()
             return True
         return False
 
-    # ------ Actualizar producto ------
-    def actualizar_producto(self, id_producto, nombre=None, cantidad=None, precio=None):
-        if id_producto not in self.productos:
-            return False
-        p = self.productos[id_producto]
-        if nombre: p.set_nombre(nombre)
-        if cantidad is not None: p.set_cantidad(cantidad)
-        if precio is not None: p.set_precio(precio)
-        self.gestor.guardar_productos(self.productos)
-        return True
-
-    # ------ Listar todos los productos ------
-    def listar_productos(self):
-        return list(self.productos.values())
+    # ---------- Eliminar producto ----------
+    def eliminar_producto(self, pid):
+        pid = str(pid)
+        if pid in self.productos:
+            del self.productos[pid]
+            self.guardar_productos()
+            return True
+        return False
